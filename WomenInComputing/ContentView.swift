@@ -11,6 +11,7 @@ import AVFAudio
 struct ContentView: View {
   
   @State private var audioPlayer: AVAudioPlayer!
+  @State private var playAudio: Bool = true
   @State private var currentIndex: Int = 0
   
   private let names: [String] = [
@@ -103,10 +104,22 @@ struct ContentView: View {
       Spacer()
       
       HStack {
+        Text("Audio On: ")
+          .font(.title2)
+          .fontWeight(.medium)
+        Toggle("Play Sound", isOn: $playAudio)
+          .labelsHidden()
+          .onChange(of: playAudio) { oldValue, newValue in
+            audioPlayer.stop()
+          }
+        
         Spacer()
+        
         Button {
           // Random
-          playSound(soundName: "theme")
+          if playAudio {
+            playAudio ? playSound(soundName: "theme") : ()
+          }
           
           var newIndex: Int
           repeat {
